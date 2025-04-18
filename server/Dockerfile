@@ -19,9 +19,6 @@ RUN apk update \
     \
     && rm -rf /var/cache/apk/*
 
-RUN chown -R lord:lord /app
-
-
 COPY . .
 
 RUN mkdir -p /app/media

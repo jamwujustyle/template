@@ -61,35 +61,42 @@ TEMPLATES = [
 WSGI_APPLICATION = "app.wsgi.application"
 
 
-# Database
-# https://docs.djangoproject.com/en/5.2/ref/settings/#databases
-
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": os.environ.get("DB_NAME", "no-name"),
-        "USER": os.environ.get("DB_USER, 'no-user"),
+        "USER": os.environ.get("DB_USER", "no-user"),
         "PASSWORD": os.environ.get("DB_PASSWORD", "no-pass"),
-        "HOST": os.environ.get("HOST", "no-host"),
-        "PORT": os.environ.get("PORT", "no-port"),
+        "HOST": os.environ.get("DB_HOST", "no-host"),
+        "PORT": os.environ.get("DB_PORT", "no-port"),
     }
 }
+print(os.environ.get("DB_NAME"))
+print(os.environ.get("DB_USER"))
+print(os.environ.get("DB_PASSWORD"))
+print(os.environ.get("DB_HOST"))
+print(os.environ.get("DB_PORT"))
+REST_FRAMEWORK = {
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    ),
+    "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated"),
+}
 
-
-AUTH_PASSWORD_VALIDATORS = [
-    {
-        "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
-    },
-    {
-        "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
-    },
-]
+# AUTH_PASSWORD_VALIDATORS = [
+#     {
+#         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",
+#     },
+#     {
+#         "NAME": "django.contrib.auth.password_validation.MinimumLengthValidator",
+#     },
+#     {
+#         "NAME": "django.contrib.auth.password_validation.CommonPasswordValidator",
+#     },
+#     {
+#         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
+#     },
+# ]
 
 
 LANGUAGE_CODE = "en-us"
