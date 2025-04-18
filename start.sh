@@ -18,5 +18,10 @@ free_port() {
 # Free ports
 free_port 5432
 free_port 8000
+free_port 3000
 
-docker-compose up
+echo "Stopping existing containers..."
+docker-compose down # Ensure all services defined in the compose file are stopped and removed
+
+echo "Building and starting containers..."
+docker-compose up --build # Add --build flag to force rebuilding images

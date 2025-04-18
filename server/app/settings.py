@@ -28,10 +28,13 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "corsheaders",
     # APPS
+    "core",
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -71,18 +74,14 @@ DATABASES = {
         "PORT": os.environ.get("DB_PORT", "no-port"),
     }
 }
-print(os.environ.get("DB_NAME"))
-print(os.environ.get("DB_USER"))
-print(os.environ.get("DB_PASSWORD"))
-print(os.environ.get("DB_HOST"))
-print(os.environ.get("DB_PORT"))
+
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": (
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated"),
 }
-
+CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
 # AUTH_PASSWORD_VALIDATORS = [
 #     {
 #         "NAME": "django.contrib.auth.password_validation.UserAttributeSimilarityValidator",

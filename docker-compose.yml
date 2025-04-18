@@ -37,8 +37,7 @@ services:
       service: frontend
     networks:
       - app-network
-    environment:
-      - BACKEND_URL=http://backend:8000
+    # Removed environment variable, client will use hardcoded localhost URL
 
 networks:
   app-network:
