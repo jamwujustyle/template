@@ -1,0 +1,9 @@
+services:
+  backend:
+    extends:
+      file: ./server/docker-compose.server.yml
+      service: swallet
+  frontend:
+    extends:
+      file: ./client/docker-compose.client.yml
+      service: frontend
