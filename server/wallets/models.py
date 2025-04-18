@@ -50,8 +50,3 @@ class Signer(models.Model):
     chain_id = models.IntegerField()
     created_at = models.DateTimeField(auto_now_add=True)
     weight = models.IntegerField(default=1)  # for mulisig threshold
-
-
-# why have on_delete=cascade everywhere
-# why define creator_salt in account if user already has. if it refers to the same salt then could be a foreign key no?
-# what is multisig threshold

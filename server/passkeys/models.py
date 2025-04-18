@@ -14,6 +14,3 @@ class PassKeyCredential(models.Model):
     signature_counter = models.BigIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     last_used = models.DateTimeField(null=True)
-
-
-# why passkey credential is charfield with max_length=255
