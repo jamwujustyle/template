@@ -16,7 +16,7 @@ services:
       start_period: 5s
       timeout: 5s
     env_file:
-      - ./server/.env  # Correct path from root
+      - ./server/.env
     networks:
       - app-network
 
@@ -25,7 +25,7 @@ services:
       file: ./server/docker-compose.server.yml
       service: swallet
     env_file:
-      - ./server/.env # Correct path from root
+      - ./server/.env
     networks:
       - app-network
     depends_on:
@@ -37,7 +37,6 @@ services:
       service: frontend
     networks:
       - app-network
-    # Removed environment variable, client will use hardcoded localhost URL
 
 networks:
   app-network:
@@ -45,4 +44,4 @@ networks:
 
 volumes:
   swalletdb_data:
-  media_volume: # Define volumes used by services here
+  media_volume:

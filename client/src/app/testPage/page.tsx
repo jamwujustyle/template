@@ -1,7 +1,7 @@
 "use client"; // Mark this component as a Client Component
 
 import { useQuery } from "@tanstack/react-query";
-import api from "@/utils/api";
+import api from "@/services/api";
 
 type DataResponse = {
   name: string;
