@@ -1,16 +1,26 @@
+import secrets
 import uuid
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
 
 # **CLOSELY TIED TO USER AUTHENTICATION FLOW MODELS**
 
 
-class UserManager(models.Manager):
-    def create_user(self, email):
-        salt = self._generate_salt()
-        return self.create(email=email, salt=salt)
+class UserManager(BaseUserManager):
+    def create_user(self, email, password=None, **extra_fields):
+        if not email:
+            raise ValueError("Email must be set")
 
-    def _generate_salt(self):
-        return uuid.uuid4().hex
+        email = self.normalize_email(email)
+
+        if "salt" not in extra_fields:
+            extra_fields["salt"] = secrets.token_hex(64)
+
+        user = self.model(email=email, **extra_fields)
+        user.set_unusable_password()
+        user.save(using=self._db)
+
+        return user
 
 
 class User(models.Model):
@@ -22,6 +32,8 @@ class User(models.Model):
         max_length=128
     )  # for cryptographic operations ensures derivation of unique salt for users with the same credentials
     created_at = models.DateTimeField(auto_now_add=True)
+
+    objects = UserManager()
 
 
 # for tracking authentication attempts
