@@ -104,7 +104,8 @@ STATIC_URL = "static/"
 # TODO: DEFINE DEFAULT_FROM_EMAIL
 # TODO: settings.RP_NAME, settings.RP_ID
 
-DEFAULT_FROM_EMAIL = "jamwujustyle@gmail.com"
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+DEFAULT_FROM_EMAIL = "no-reply@swallet.dev"
 
 RP_NAME = "SWallet"
 RP_ID = "localhost"

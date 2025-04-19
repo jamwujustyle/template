@@ -85,6 +85,10 @@ class LoginSerializer(serializers.Serializer):
         return data
 
 
+class PasswordResetRequestSerializer(serializers.Serializer):
+    email = serializers.EmailField()
+
+
 class PasswordResetConfirmSerializer(serializers.Serializer):
     """
     Performs validation and update of a password for existing user

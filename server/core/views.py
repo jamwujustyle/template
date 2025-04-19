@@ -11,13 +11,18 @@ from django.conf import settings
 
 from utils.exception_handler import ErrorHandlingMixin
 
-from .serializers import UserSerializer, LoginSerializer, PasswordResetConfirmSerializer
+from .serializers import (
+    UserSerializer,
+    LoginSerializer,
+    PasswordResetConfirmSerializer,
+    PasswordResetRequestSerializer,
+)
 from logging_config import logger
 
 from drf_spectacular.utils import extend_schema
 
 
-@extend_schema(tags=["user"])
+@extend_schema(tags=["auth"])
 class UserRegister(ErrorHandlingMixin, generics.CreateAPIView):
     serializer_class = UserSerializer
     permission_classes = [AllowAny]
@@ -40,7 +45,7 @@ class UserRegister(ErrorHandlingMixin, generics.CreateAPIView):
         return Response(token_data, status=status.HTTP_201_CREATED)
 
 
-@extend_schema(tags=["user"])
+@extend_schema(tags=["auth"])
 class UserLogin(ErrorHandlingMixin, APIView):
     permission_classes = [AllowAny]
     serializer_class = LoginSerializer
@@ -56,7 +61,7 @@ class UserLogin(ErrorHandlingMixin, APIView):
         return Response(token_data, status=status.HTTP_200_OK)
 
 
-@extend_schema(tags=["user"])
+@extend_schema(tags=["auth"])
 class UserProfile(ErrorHandlingMixin, generics.RetrieveAPIView):
     serializer_class = UserSerializer
     permission_classes = [IsAuthenticated]
@@ -65,14 +70,15 @@ class UserProfile(ErrorHandlingMixin, generics.RetrieveAPIView):
         return self.request.user
 
 
-@extend_schema(tags=["user"])
+@extend_schema(tags=["auth"])
 class UserRecover(ErrorHandlingMixin, APIView):
     permission_classes = [AllowAny]
+    serializer_class = PasswordResetRequestSerializer
 
     def post(self, request):
         email = request.data.get("email")
         user = get_user_model().objects.filter(email=email).first()
-
+        logger.critical(f"email passed: {email}, user found: {user}")
         if not user:
             return Response(
                 {"email": "User not found"}, status=status.HTTP_400_BAD_REQUEST
@@ -93,12 +99,17 @@ class UserRecover(ErrorHandlingMixin, APIView):
         return Response({"msg": "Password reset email sent"})
 
 
-@extend_schema(tags=["user"])
+@extend_schema(tags=["auth"])
 class UserRecoverConfirm(ErrorHandlingMixin, APIView):
     permission_classes = [AllowAny]
+    serializer_class = PasswordResetConfirmSerializer
 
     def post(self, request):
+        # TODO: EXTRACT TOKEN FROM HEADERS
         serializer = PasswordResetConfirmSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response({"msg": "password reset successful"})
+
+
+# TODO: DISTINGUISH BETWEEN RECOVERING AND LOGIN JWTS

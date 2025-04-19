@@ -12,8 +12,10 @@ from .serializers import (
 )
 from .services import PasskeyService, bytes_to_base64url, base64url_to_bytes
 from utils.exception_handler import ErrorHandlingMixin
+from drf_spectacular.utils import extend_schema
 
 
+@extend_schema(tags=["passkey"])
 class PassKeyViewSet(ErrorHandlingMixin, viewsets.ViewSet):
     permission_classes = [IsAuthenticated]
     passkey_service = PasskeyService()
