@@ -10,7 +10,15 @@ class PassKeyCredential(models.Model):
     algorithm_type = models.CharField(
         max_length=10, choices=[("ECDSA", "ECDSA"), ("RSA", "RSA"), ("P256", "P256")]
     )
+
     attestation_object = models.TextField(null=True)
     signature_counter = models.BigIntegerField(default=0)
     created_at = models.DateTimeField(auto_now_add=True)
     last_used = models.DateTimeField(null=True)
+    # credential_type = models.CharField(max_length=20, default="public_key")
+    # transports = models.JSONField(null=True, blank=True) # e.g. ['usb', 'ble']
+
+    # class Meta:
+    #     indexes = [
+    #         models.Index(fields=[""]),
+    #     ]

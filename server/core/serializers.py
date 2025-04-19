@@ -1,3 +1,4 @@
+from rest_framework_simplejwt.tokens import AccessToken
 from django.contrib.auth import authenticate
 from rest_framework import serializers
 from logging_config import logger
@@ -5,6 +6,18 @@ from .models import User
 
 
 class UserSerializer(serializers.ModelSerializer):
+    """
+    Serializes User instance at the moment of creation
+
+    Args:
+        serializers (ModelSerializer): _description_
+
+    Raises:
+        serializers.ValidationError: routed to custom ErrorHandler
+
+    Returns:
+        object: user instance
+    """
 
     class Meta:
         model = User
@@ -12,6 +25,7 @@ class UserSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             "id": {"read_only": True},
             "email": {"required": True},
+            "password": {"write_only": True},
             "salt": {"read_only": True},
             "created_at": {"read_only": True},
         }
@@ -38,13 +52,25 @@ class UserSerializer(serializers.ModelSerializer):
             )
             return instance
 
-        # Use the custom manager's create_user method to ensure password hashing
         password = validated_data.pop("password", None)
         user = User.objects.create_user(password=password, **validated_data)
         return user
 
 
 class LoginSerializer(serializers.Serializer):
+    """
+    Serializes existing record in User table
+    Args:
+        serializers (Serializer): _description_
+
+    Raises:
+        serializers.ValidationError: routed to custom ErrorHandler
+
+    Returns:
+    object: user instance
+
+    """
+
     email = serializers.EmailField()
     password = serializers.CharField(
         write_only=True
@@ -57,3 +83,36 @@ class LoginSerializer(serializers.Serializer):
             raise serializers.ValidationError("Invalid email or password")
         data["user"] = user
         return data
+
+
+class PasswordResetConfirmSerializer(serializers.Serializer):
+    """
+    Performs validation and update of a password for existing user
+    Args:
+        serializers (Serializer): _description_
+
+    Raises:
+        serializers.ValidationError: routed to custom Exception Handler
+
+    Returns:
+        object: updated User instance
+    """
+
+    token = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+
+    def validate(self, data):
+        try:
+            token = AccessToken(data["token"])
+            user_id = token["user_id"]
+            user = User.objects.get(id=user_id)
+            data["user"] = user
+
+        except Exception:
+            raise serializers.ValidationError("Invalid or expired token")
+        return data
+
+    def save(self):
+        user = self.validated_data["user"]
+        user.set_password(self.validated_data["password"])
+        user.save()

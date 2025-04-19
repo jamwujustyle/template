@@ -44,6 +44,11 @@ class User(AbstractBaseUser):
     def __str__(self):
         return self.email
 
+    class Meta:
+        indexes = [
+            models.Index(fields=["email"]),
+        ]
+
 
 # for tracking authentication attempts
 class PassKeyChallenge(models.Model):
@@ -60,3 +65,8 @@ class PassKeyChallenge(models.Model):
             ("TRANSACTION", "Transaction"),
         ],
     )
+
+    class Meta:
+        indexes = [
+            models.Index(fields=["is_used"]),
+        ]

@@ -24,8 +24,10 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "rest_framework",
     "corsheaders",
+    "drf_spectacular",
     # APPS
     "core",
+    "passkeys",
 ]
 
 MIDDLEWARE = [
@@ -75,8 +77,15 @@ REST_FRAMEWORK = {
         "rest_framework_simplejwt.authentication.JWTAuthentication",
     ),
     "DEFAULT_PERMISSION_CLASSES": ("rest_framework.permissions.IsAuthenticated",),
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
 }
 
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Your API Title",
+    "DESCRIPTION": "Optional description",
+    "VERSION": "1.0.0",
+    # You can also set `SERVE_INCLUDE_SCHEMA = False` to hide `/schema/`
+}
 
 SIMPLE_JWT = {
     "ACCESS_TOKEN_LIFETIME": timedelta(days=7),
@@ -92,6 +101,13 @@ CORS_ALLOWED_ORIGINS = ["http://localhost:3000"]
 
 STATIC_URL = "static/"
 
+# TODO: DEFINE DEFAULT_FROM_EMAIL
+# TODO: settings.RP_NAME, settings.RP_ID
+
+DEFAULT_FROM_EMAIL = "jamwujustyle@gmail.com"
+
+RP_NAME = "SWallet"
+RP_ID = "localhost"
 
 WSGI_APPLICATION = "app.wsgi.application"
 LANGUAGE_CODE = "en-us"

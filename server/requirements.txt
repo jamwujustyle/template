@@ -2,8 +2,12 @@
 Django>=5.2,<5.3
 djangorestframework>=3.16.0,<3.17
 psycopg2>=2.9.10,<2.10
-# SUPPLEMENTS
+# UTILS
 dotenv>=0.9.9,<1
 django-cors-headers>=4.7.0,<5
 djangorestframework_simplejwt>=5.5.0,<5.6
 pillow>=11.1.0,<11.2
+drf-spectacular>=0.28.0,<0.29
+# CRYPTOGRAPHY/BIOMETRIC AUTH
+fido2>=1.2.0,<2
+cryptography>=44.0.2,<45
