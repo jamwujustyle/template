@@ -1,6 +1,7 @@
 from django.urls import path
-from .views import Mock
+from .views import UserRegister, UserLogin
 
 urlpatterns = [
-    path("data", Mock.as_view(), name="mock"),
+    path("register", UserRegister.as_view(), name="register"),
+    path("login", UserLogin.as_view(), name="login"),
 ]

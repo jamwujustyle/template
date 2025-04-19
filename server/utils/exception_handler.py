@@ -46,7 +46,12 @@ class ErrorHandlingMixin:
             )
 
         if isinstance(ex, serializers.ValidationError):
-            return Response({"error": ex.detail}, status=status.HTTP_400_BAD_REQUEST)
+            logger.critical("ex:", ex, "ex detail:", ex.detail)
+            flat_error = {
+                key: value[0] if isinstance(value, list) and value else value
+                for key, value in ex.detail.items()
+            }
+            return Response(flat_error, status=status.HTTP_400_BAD_REQUEST)
 
         if isinstance(ex, ParseError):
             return Response(
